@@ -15,6 +15,7 @@ export default function EditModal({ recipe, index, toggelEdit, setShowModal }) {
       .join(""),
     isVeg: recipe.vegetarian,
   };
+
   const [recipeDetails, setRecipeDetails] = useState(initialObj);
 
   const handleChange = (event) => {
@@ -34,6 +35,48 @@ export default function EditModal({ recipe, index, toggelEdit, setShowModal }) {
   const handleSubmitChange = (event) => {
     event.preventDefault();
     toggelEdit(false);
+
+    const instructions = recipeDetails.recipeInstructions.split(".");
+    const lastIndex = instructions.length - 1;
+
+    const mappedInstructions = instructions.map((instruction, index) => {
+      if (index === lastIndex) {
+        return { step: instruction.trim() };
+      } else {
+        return { step: instruction.trim() + "." };
+      }
+    });
+
+    console.log(mappedInstructions);
+
+    const recipeObj = {
+      vegetarian: recipeDetails.isVeg,
+      servings: recipeDetails.recipeServing,
+      title: recipeDetails.recipeTitle,
+      image: recipeDetails.recipeUrl,
+      readyInMinutes: recipeDetails.recipeTime,
+      extendedIngredients: recipeDetails.recipeIngredients
+        .split(",")
+        .map((ingredient) => {
+          return {
+            original: ingredient,
+          };
+        }),
+      analyzedInstructions: new Array({
+        steps: mappedInstructions,
+      }),
+    };
+
+    let recipeData = JSON.parse(localStorage.getItem("recipeData"));
+    recipeData = recipeData.map((recipe, i) => {
+      if (i == index) {
+        return recipeObj;
+      }
+      return recipe;
+    });
+
+    localStorage.setItem("recipeData", JSON.stringify(recipeData));
+
     setShowModal(false);
   };
 
@@ -42,6 +85,7 @@ export default function EditModal({ recipe, index, toggelEdit, setShowModal }) {
       <Modal.Header closeButton className="text-bg-dark">
         <Modal.Title>Edit Recipe</Modal.Title>
       </Modal.Header>
+
       <Modal.Body className="text-bg-dark">
         <div className="mb-3 row">
           <div className="col">
@@ -151,6 +195,7 @@ export default function EditModal({ recipe, index, toggelEdit, setShowModal }) {
           </div>
         </div>
       </Modal.Body>
+
       <Modal.Footer className="text-bg-dark">
         <Button variant="secondary" onClick={() => setShowModal(false)}>
           Close

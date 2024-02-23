@@ -31,10 +31,11 @@ export default function Dashboard({ isEditable, toggelEdit }) {
         </li>
         <li className="nav-item">
           <Link
+            to="/"
+            className="nav-link text-light pe-auto"
             onClick={() => {
               toggelEdit(!isEditable);
             }}
-            className="nav-link text-light"
           >
             {!isEditable ? "Edit Recipes" : "Disable Edit"}
           </Link>

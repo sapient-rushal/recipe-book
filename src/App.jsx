@@ -37,42 +37,53 @@ export default function App() {
 
   return (
     <>
-      <BrowserRouter>
-        <div className="d-flex">
-          {showDashboard && (
-            <Dashboard isEditable={isEditable} toggelEdit={toggelEdit} />
-          )}{" "}
-          <div style={{ width: !showDashboard ? "100vw" : "84vw" }}>
-            <Header
-              showDashboard={showDashboard}
-              search={search}
-              setSearch={setSearch}
-            />
-            <div className="container">
-              <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <RecipeList
-                      search={search}
-                      isEditable={isEditable}
-                      toggelEdit={toggelEdit}
-                    />
-                  }
-                />
-                <Route path="/addrecipe" element={<AddRecipe />} />
-                <Route
-                  path="/viewrecipe/:recipeIndex"
-                  element={<ViewRecipe />}
-                />
-                <Route path="/aboutus" element={<MaintanacePage />} />
-                <Route path="/contactus" element={<MaintanacePage />} />
-                <Route path="/*" element={<Error404 />} />
-              </Routes>
+      {!isDataLoaded ? (
+        <LoadData
+          recipeListSize={recipeListSize}
+          setIsDataLoaded={setIsDataLoaded}
+        />
+      ) : (
+        <BrowserRouter>
+          <div className="d-flex">
+            {showDashboard && (
+              <Dashboard isEditable={isEditable} toggelEdit={toggelEdit} />
+            )}
+
+            <div style={{ width: !showDashboard ? "100vw" : "84vw" }}>
+              <Header
+                showDashboard={showDashboard}
+                search={search}
+                setSearch={setSearch}
+                isEditable={isEditable}
+                toggelEdit={toggelEdit}
+              />
+
+              <div className="container">
+                <Routes>
+                  <Route
+                    path="/"
+                    element={
+                      <RecipeList
+                        search={search}
+                        isEditable={isEditable}
+                        toggelEdit={toggelEdit}
+                      />
+                    }
+                  />
+                  <Route path="/addrecipe" element={<AddRecipe />} />
+                  <Route
+                    path="/viewrecipe/:recipeIndex"
+                    element={<ViewRecipe />}
+                  />
+                  <Route path="/aboutus" element={<MaintanacePage />} />
+                  <Route path="/contactus" element={<MaintanacePage />} />
+                  <Route path="/*" element={<Error404 />} />
+                </Routes>
+              </div>
             </div>
           </div>
-        </div>
-      </BrowserRouter>
+        </BrowserRouter>
+      )}
     </>
   );
 }

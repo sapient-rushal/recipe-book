@@ -7,7 +7,7 @@ export default function RecipeList({ search, isEditable, toggelEdit }) {
   useEffect(() => {
     const data = localStorage.getItem("recipeData");
     setRecipeList(JSON.parse(data));
-  }, []);
+  }, [localStorage.getItem("recipeData")]);
 
   return (
     <div className="container mb-5">
@@ -24,6 +24,7 @@ export default function RecipeList({ search, isEditable, toggelEdit }) {
               />
             );
           }
+
           const isIngredient =
             recipe.extendedIngredients
               .map((ingredient) => ingredient.originalName.toLowerCase())
@@ -32,8 +33,8 @@ export default function RecipeList({ search, isEditable, toggelEdit }) {
               ).length !== 0;
 
           if (
-            recipe.title.toLowerCase().includes(search.toLowerCase()) ||
-            isIngredient
+            isIngredient ||
+            recipe.title.toLowerCase().includes(search.toLowerCase())
           ) {
             return (
               <RecipeCard

@@ -1,8 +1,11 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import defaultRecipeImage from "../assets/recipeCard-image/default-recipe-image.jpg";
+import { ThreeCircles } from "react-loader-spinner";
 
 export default function LoadData({ recipeListSize, setIsDataLoaded }) {
+  const [loading, setLoading] = useState(false);
+
   const recipeData = localStorage.getItem("recipeData");
   if (recipeData) {
     setIsDataLoaded(true);
@@ -10,6 +13,7 @@ export default function LoadData({ recipeListSize, setIsDataLoaded }) {
   }
 
   useEffect(() => {
+    setLoading(true);
     const fetchRecipies = async () => {
       const options = {
         method: "GET",
@@ -24,15 +28,12 @@ export default function LoadData({ recipeListSize, setIsDataLoaded }) {
         const response = await axios.request(options);
 
         const recipeData = response.data.recipes.map((recipe) => {
-          if (recipe.image) {
-            return recipe;
-          } else {
-            return { ...recipe, image: defaultRecipeImage };
-          }
+          return { ...recipe, defaultImage: defaultRecipeImage };
         });
 
         localStorage.setItem("recipeData", JSON.stringify(recipeData));
         setIsDataLoaded(true);
+        setLoading(false);
       } catch (error) {
         console.error(error);
       }
@@ -40,5 +41,23 @@ export default function LoadData({ recipeListSize, setIsDataLoaded }) {
     fetchRecipies();
   }, []);
 
-  return <></>;
+  return (
+    <>
+      {loading && (
+        <>
+          <div className="d-flex justify-content-md-center align-items-center vh-100">
+            <ThreeCircles
+              visible={true}
+              height="100"
+              width="100"
+              color="#4fa94d"
+              ariaLabel="three-circles-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+            />
+          </div>
+        </>
+      )}
+    </>
+  );
 }

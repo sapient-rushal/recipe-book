@@ -1,7 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function Header({ showDashboard, search, setSearch }) {
+export default function Header({
+  showDashboard,
+  search,
+  setSearch,
+  isEditable,
+  toggelEdit,
+}) {
   return (
     <nav
       className="navbar navbar-expand-lg bg-black"
@@ -30,11 +36,24 @@ export default function Header({ showDashboard, search, setSearch }) {
               </Link>
             </li>
             {!showDashboard && (
-              <li className="nav-item">
-                <Link to="/addrecipe" className="nav-link text-light">
-                  Add new Recipe
-                </Link>
-              </li>
+              <>
+                <li className="nav-item">
+                  <Link to="/addrecipe" className="nav-link text-light">
+                    Add new Recipe
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    to="/"
+                    onClick={() => {
+                      toggelEdit(!isEditable);
+                    }}
+                    className="nav-link text-light"
+                  >
+                    {!isEditable ? "Edit Recipes" : "Disable Edit"}
+                  </Link>
+                </li>
+              </>
             )}
 
             <li className="nav-item">
@@ -49,7 +68,7 @@ export default function Header({ showDashboard, search, setSearch }) {
             </li>
           </ul>
           <div className="nav-item">
-            <form className="d-flex">
+            <div className="d-flex">
               <input
                 className="form-control me-2"
                 value={search}
@@ -66,14 +85,13 @@ export default function Header({ showDashboard, search, setSearch }) {
                   }
                 }}
               />
-              {/* <button
-                className="btn btn-outline-success"
-                type="button"
-                
-              >
-                Search
-              </button> */}
-            </form>
+              <button className="btn btn-outline-primary mx-2" type="button">
+                LogIn
+              </button>
+              <button className="btn btn-primary" type="button">
+                SignUp
+              </button>
+            </div>
           </div>
         </div>
       </div>
