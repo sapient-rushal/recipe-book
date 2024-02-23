@@ -1,23 +1,49 @@
 import React, { useEffect, useState } from "react";
 import veg from "../../assets/recipeCard-image/veg-icon.svg";
 import nonveg from "../../assets/recipeCard-image/non-veg-icon.svg";
+import EditModal from "../modal/EditModal";
 
-export default function ViewRecipeCard({ recipe }) {
+export default function ViewRecipeCard({
+  recipe,
+  index,
+  setStorageDataChanged,
+}) {
+  const [showModal, setShowModal] = useState(false);
+
   const instructions = recipe.analyzedInstructions[0].steps.map(
     (instruction) => instruction.step
   );
 
   return (
     <>
+      {showModal && (
+        <EditModal
+          recipe={recipe}
+          index={index}
+          setShowModal={setShowModal}
+          setStorageDataChanged={setStorageDataChanged}
+        />
+      )}
+
       <div className="mx-5 my-5">
-        <span className="fs-1 fw-bold text-secondary">
-          {recipe.title}{" "}
-          <img
-            className="mx-1"
-            src={recipe.vegetarian ? veg : nonveg}
-            style={{ width: "30px" }}
-          />{" "}
-        </span>
+        <div className="row">
+          <span className="col fs-1 fw-bold text-secondary">
+            {recipe.title}{" "}
+            <img
+              className="mx-1"
+              src={recipe.vegetarian ? veg : nonveg}
+              style={{ width: "30px" }}
+            />{" "}
+          </span>
+          <div
+            className="col-1 btn btn-success fs-5 m-2"
+            onClick={() => {
+              setShowModal(true);
+            }}
+          >
+            Edit
+          </div>
+        </div>
         <div className="d-flex mx-4 my-4">
           <div className="d-flex align-items-center justify-content-center">
             <img
@@ -32,11 +58,11 @@ export default function ViewRecipeCard({ recipe }) {
             <span className="text-secondary fs-3">
               (Servings for <b>{recipe.servings}</b>)
             </span>
-            <div className="d-flex flex-wrap mx-4 my-3">
+            <div className="d-flex flex-wrap my-3">
               {recipe.extendedIngredients.map((ingredient, index) => (
                 <span
                   key={`${index}-ingredient`}
-                  className=" fs-5 text-dark-emphasis bg-black m-1 px-3 py-2 rounded-4"
+                  className="fs-5 text-dark-emphasis bg-black m-1 px-3 py-2 rounded-4"
                 >
                   {ingredient.original}
                 </span>

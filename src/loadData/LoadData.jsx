@@ -7,6 +7,7 @@ export default function LoadData({ recipeListSize, setIsDataLoaded }) {
   const [loading, setLoading] = useState(false);
 
   const recipeData = localStorage.getItem("recipeData");
+  
   if (recipeData) {
     setIsDataLoaded(true);
     return <></>;
@@ -32,8 +33,8 @@ export default function LoadData({ recipeListSize, setIsDataLoaded }) {
         });
 
         localStorage.setItem("recipeData", JSON.stringify(recipeData));
-        setIsDataLoaded(true);
         setLoading(false);
+        setIsDataLoaded(true);
       } catch (error) {
         console.error(error);
       }

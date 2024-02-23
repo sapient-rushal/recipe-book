@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import LoadData from "./loadData/LoadData";
@@ -6,34 +6,16 @@ import Header from "./components/header/Header";
 import RecipeList from "./components/home/RecipeList";
 import ViewRecipe from "./components/recipeDetails/ViewRecipe";
 import AddRecipe from "./components/addNewRecipe/AddRecipe";
-import Dashboard from "./components/dashboard/Dashboard";
 import Error404 from "./components/error/Error404";
 import MaintanacePage from "./components/maintancePages/MaintancePage";
+import LogIn from "./components/user/Login";
+import Signup from "./components/user/Signup";
 
 export default function App() {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
-  const [showDashboard, setShowDashboard] = useState(true);
   const [search, setSearch] = useState("");
   const [isEditable, toggelEdit] = useState(false);
   const recipeListSize = 20;
-
-  useEffect(() => {
-    const { innerWidth: width, innerHeight: height } = window;
-    if (width <= 1120) {
-      setShowDashboard(false);
-    } else {
-      setShowDashboard(true);
-    }
-  }, [window.innerWidth]);
-
-  if (!isDataLoaded) {
-    return (
-      <LoadData
-        recipeListSize={recipeListSize}
-        setIsDataLoaded={setIsDataLoaded}
-      />
-    );
-  }
 
   return (
     <>
@@ -45,13 +27,8 @@ export default function App() {
       ) : (
         <BrowserRouter>
           <div className="d-flex">
-            {showDashboard && (
-              <Dashboard isEditable={isEditable} toggelEdit={toggelEdit} />
-            )}
-
-            <div style={{ width: !showDashboard ? "100vw" : "84vw" }}>
+            <div style={{ width: "100vw" }}>
               <Header
-                showDashboard={showDashboard}
                 search={search}
                 setSearch={setSearch}
                 isEditable={isEditable}
@@ -75,6 +52,8 @@ export default function App() {
                     path="/viewrecipe/:recipeIndex"
                     element={<ViewRecipe />}
                   />
+                  <Route path="/login" element={<LogIn />} />
+                  <Route path="/signup" element={<Signup />} />
                   <Route path="/aboutus" element={<MaintanacePage />} />
                   <Route path="/contactus" element={<MaintanacePage />} />
                   <Route path="/*" element={<Error404 />} />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FaRegClock } from "react-icons/fa6";
 
@@ -6,7 +6,13 @@ import EditModal from "../modal/EditModal";
 import veg from "../../assets/recipeCard-image/veg-icon.svg";
 import nonveg from "../../assets/recipeCard-image/non-veg-icon.svg";
 
-export default function RecipeCard({ recipe, index, isEditable, toggelEdit }) {
+export default function RecipeCard({
+  recipe,
+  index,
+  isEditable,
+  toggelEdit,
+  setStorageDataChanged,
+}) {
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -17,6 +23,7 @@ export default function RecipeCard({ recipe, index, isEditable, toggelEdit }) {
           index={index}
           toggelEdit={toggelEdit}
           setShowModal={setShowModal}
+          setStorageDataChanged={setStorageDataChanged}
         />
       )}
 
@@ -37,19 +44,19 @@ export default function RecipeCard({ recipe, index, isEditable, toggelEdit }) {
             </h5>
           </div>
           <div className="card-footer d-flex">
-            {isEditable ? (
+            <Link to={`/viewrecipe/${index}`} className="btn btn-primary">
+              Recipe
+            </Link>
+
+            {isEditable && (
               <div
-                className="btn btn-success"
+                className="btn btn-success mx-2"
                 onClick={() => {
                   setShowModal(true);
                 }}
               >
                 Edit
               </div>
-            ) : (
-              <Link to={`/viewrecipe/${index}`} className="btn btn-primary">
-                Recipe
-              </Link>
             )}
             <p className="fs-6 my-auto ms-auto">
               Servings: <b>{recipe.servings}</b>
