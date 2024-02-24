@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import RecipeCard from "./RecipeCard";
+import RecipeCard from "../cards/RecipeCard";
 
 export default function RecipeList({ search, isEditable, toggelEdit }) {
   const [recipeList, setRecipeList] = useState([]);

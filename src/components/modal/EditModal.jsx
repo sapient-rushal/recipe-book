@@ -36,8 +36,6 @@ export default function EditModal({
   };
 
   const onSubmit = methods.handleSubmit((data) => {
-    console.log(data);
-
     if (toggelEdit) toggelEdit(false);
 
     const instructions = data.recipeInstructions.trim().split(".");

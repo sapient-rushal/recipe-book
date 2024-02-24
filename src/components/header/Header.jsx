@@ -1,12 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Logout from "../user/Logout";
 
-export default function Header({ search, setSearch, isEditable, toggelEdit }) {
+export default function Header({
+  search,
+  setSearch,
+  isEditable,
+  toggelEdit,
+  storageDataChange,
+  setStorageDataChange,
+}) {
+  const [customer, setCustomer] = useState({ isExist: false });
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  useEffect(() => {
+    let customerData = localStorage.getItem("customerData");
+
+    if (customerData) {
+      customerData = JSON.parse(customerData);
+
+      if (customerData.isExist) {
+        setCustomer({ ...customerData });
+      }
+    }
+  }, [storageDataChange]);
+
+  const handleLogout = () => {
+    setShowLogoutModal(true);
+  };
+
   return (
     <>
       <nav
         className="navbar navbar-expand-lg bg-black navbar-dark row text-center"
-        style={{ minHeight: "70px", minWidth: "84vw" }}
+        style={{ minHeight: "70px" }}
       >
         <div className="container-fluid">
           <Link className="col-2 navbar-brand text-light" to="/">
@@ -43,9 +70,9 @@ export default function Header({ search, setSearch, isEditable, toggelEdit }) {
               </li>
               <li className="nav-item">
                 <Link
-                  to="/"
+                  to={customer.isExist ? "/" : "/login"}
                   onClick={() => {
-                    toggelEdit(!isEditable);
+                    if (customer.isExist) toggelEdit(!isEditable);
                   }}
                   className="nav-link text-light"
                 >
@@ -82,21 +109,47 @@ export default function Header({ search, setSearch, isEditable, toggelEdit }) {
                     }
                   }}
                 />
-                <Link
-                  to="/login"
-                  className="mx-2 btn btn-outline-primary mx-2"
-                  type="button"
-                >
-                  LogIn
-                </Link>
-                <Link to="/signup" className="mx-2 btn btn-primary" type="button">
-                  SignUp
-                </Link>
+                {customer.isExist ? (
+                  <>
+                    <Link
+                      className="mx-2 btn btn-outline-primary"
+                      type="button"
+                      onClick={handleLogout}
+                    >
+                      LogOut
+                    </Link>
+                    <span className="mx-2 fs-4">{customer.name}</span>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      className="mx-2 btn btn-outline-primary"
+                      type="button"
+                    >
+                      LogIn
+                    </Link>
+                    <Link
+                      to="/signup"
+                      className="mx-2 btn btn-primary"
+                      type="button"
+                    >
+                      SignUp
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>
         </div>
       </nav>
+      {showLogoutModal && (
+        <Logout
+          setShowLogoutModal={setShowLogoutModal}
+          setStorageDataChange={setStorageDataChange}
+          setCustomer={setCustomer}
+        />
+      )}
     </>
   );
 }

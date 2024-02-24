@@ -9,10 +9,20 @@ export default function ViewRecipeCard({
   setStorageDataChanged,
 }) {
   const [showModal, setShowModal] = useState(false);
+  const [isCustomerExist, setIsCustomerExist] = useState(false);
 
   const instructions = recipe.analyzedInstructions[0].steps.map(
     (instruction) => instruction.step
   );
+
+  useEffect(() => {
+    let customerData = localStorage.getItem("customerData");
+    if (customerData) customerData = JSON.parse(customerData);
+
+    if (customerData?.isExist) {
+      setIsCustomerExist(true);
+    }
+  }, []);
 
   return (
     <>
@@ -36,7 +46,9 @@ export default function ViewRecipeCard({
             />{" "}
           </span>
           <div
-            className="col-1 btn btn-success fs-5 m-2"
+            className={`col-1 btn btn-success fs-5 m-2 ${
+              !isCustomerExist ? "disabled" : ""
+            }`}
             onClick={() => {
               setShowModal(true);
             }}

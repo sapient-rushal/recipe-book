@@ -7,7 +7,7 @@ export default function LoadData({ recipeListSize, setIsDataLoaded }) {
   const [loading, setLoading] = useState(false);
 
   const recipeData = localStorage.getItem("recipeData");
-  
+
   if (recipeData) {
     setIsDataLoaded(true);
     return <></>;
@@ -20,7 +20,7 @@ export default function LoadData({ recipeListSize, setIsDataLoaded }) {
         method: "GET",
         url: "https://api.spoonacular.com/recipes/random",
         params: {
-          apiKey: "82ef7aad173647f99aa490187468cc78",
+          apiKey: import.meta.env.VITE_REACT_APP_RECIPE_KEY_1,
           number: recipeListSize,
         },
       };

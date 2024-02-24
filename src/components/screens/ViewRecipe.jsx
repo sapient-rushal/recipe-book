@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ViewRecipeCard from "./viewRecipeCard";
+import ViewRecipeCard from "../cards/viewRecipeCard";
 import { ThreeCircles } from "react-loader-spinner";
 
 export default function ViewRecipe() {
